@@ -50,13 +50,11 @@ extern "C" {
 
 /* USER CODE END EM */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void TIMER2_ISR();
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -66,6 +64,8 @@ void Error_Handler(void);
 #define BTN_GREEN_GPIO_Port GPIOB
 #define BTN_YELLOW_Pin GPIO_PIN_13
 #define BTN_YELLOW_GPIO_Port GPIOB
+#define BUZZER_Pin GPIO_PIN_10
+#define BUZZER_GPIO_Port GPIOA
 #define LED_YELLOW_Pin GPIO_PIN_3
 #define LED_YELLOW_GPIO_Port GPIOB
 #define LED_GREEN_Pin GPIO_PIN_4
@@ -73,7 +73,8 @@ void Error_Handler(void);
 #define LED_RED_Pin GPIO_PIN_5
 #define LED_RED_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-
+#define RX_BUFFER_SIZE 256
+#define DISCONNECTED_TIMEOUT 1000
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

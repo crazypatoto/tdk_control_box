@@ -32,7 +32,8 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
+extern char rxBuf[RX_BUFFER_SIZE];
+extern uint8_t rxLen;
 /* USER CODE END PV */
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
@@ -264,7 +265,8 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   /* USER CODE BEGIN 6 */
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
-  CDC_Transmit_FS(Buf,*Len);
+  memcpy(rxBuf, Buf, *Len);
+  rxLen = *Len;
   return (USBD_OK);
   /* USER CODE END 6 */
 }
@@ -318,7 +320,18 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
 }
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
+#include <stdarg.h>
 
+void usb_printf(const char *format, ...)
+{
+    va_list args;
+    uint32_t length;
+
+    va_start(args, format);
+    length = vsnprintf((char *)UserTxBufferFS, APP_TX_DATA_SIZE, (char *)format, args);
+    va_end(args);
+    CDC_Transmit_FS(UserTxBufferFS, length);
+}
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
 /**
