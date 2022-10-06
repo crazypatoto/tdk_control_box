@@ -1,0 +1,1 @@
+KERNEL=="ttyACM*", ATTRS{idVendor}=="0453", ATTRS{idProduct}=="3039", SYMLINK+="tdk"
